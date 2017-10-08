@@ -11,16 +11,18 @@ class RefreshService
   end
 
   def refresh_tweets
+    # Only go backwards to the last persisted tweet we have
+    since_id = Tweet.maximum(:twitter_id)
+
     NUM_REQUESTS.times do
       max_id = Tweet.minimum(:twitter_id)
-      since_id = Tweet.maximum(:twitter_id)
 
       puts "refreshing with (max_id #{max_id}, since_id #{since_id})"
 
       options = { count: TWEETS_PER_REQUEST }
 
       options.merge!({ max_id: max_id }) if max_id.present?
-      options.merge!({ since_id: since_id }) if max_id.present?
+      options.merge!({ since_id: since_id }) if since_i d.present?
 
       tweets = @client.home_timeline(options)
 

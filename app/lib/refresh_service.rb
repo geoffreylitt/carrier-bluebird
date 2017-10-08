@@ -11,21 +11,22 @@ class RefreshService
   end
 
   def refresh_tweets
-    # Only go backwards to the last persisted tweet we have
+    # Only go backwards to the last persisted tweet we had before this sync
     since_id = Tweet.maximum(:twitter_id)
+    sync_id = SecureRandom.uuid
 
     NUM_REQUESTS.times do
-      max_id = Tweet.minimum(:twitter_id)
-
-      puts "refreshing with (max_id #{max_id}, since_id #{since_id})"
+      # On each API call, go backwards from the oldest tweet we've received
+      # so far in this sync
+      max_id = Tweet.where(sync_id: sync_id).minimum(:twitter_id)
+      max_id = max_id - 1 if max_id.present?
 
       options = { count: TWEETS_PER_REQUEST }
-
       options.merge!({ max_id: max_id }) if max_id.present?
-      options.merge!({ since_id: since_id }) if since_i d.present?
+      options.merge!({ since_id: since_id }) if since_id.present?
 
+      puts "Refreshing with #{options}"
       tweets = @client.home_timeline(options)
-
       puts "saving #{tweets.length} tweets"
 
       break if tweets.length == 0
@@ -37,7 +38,8 @@ class RefreshService
             raw_data: tweet.to_h,
             twitter_id: tweet.id,
             created_at: tweet.created_at,
-            synced_at: Time.now
+            synced_at: Time.now,
+            sync_id: sync_id
           )
         end
       end

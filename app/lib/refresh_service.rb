@@ -12,14 +12,20 @@ class RefreshService
 
   def refresh_tweets
     NUM_REQUESTS.times do
-      max_id = Tweet.minimum(:twitter_id) - 1
-      puts "refreshing with max_id #{max_id}..."
+      max_id = Tweet.minimum(:twitter_id)
+      since_id = Tweet.maximum(:twitter_id)
 
-      @client.home_timeline(
+      puts "refreshing with (max_id #{max_id}, since_id #{since_id})"
+
+      tweets = @client.home_timeline(
         count: TWEETS_PER_REQUEST,
-        max_id: Tweet.minimum(:twitter_id) - 1,
+        max_id: Tweet.minimum(:twitter_id),
         since_id: Tweet.maximum(:twitter_id)
-      ).each do |tweet|
+      )
+
+      puts "saving #{tweets.length} tweets"
+
+      tweets.each do |tweet|
         # Slow to do this check once per tweet, but fast enough for now
         unless Tweet.find_by(twitter_id: tweet.id).present?
           Tweet.create!(

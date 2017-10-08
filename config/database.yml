@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: carrier_bluebird_developmennt
+
+test:
+  <<: *default
+  database: carrier_bluebird_test
+
+production:
+  <<: *default
+  database: carrier_bluebird_production
+  username:
+  password:

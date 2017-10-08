@@ -1,0 +1,10 @@
+<h1>Tweets</h1>
+
+<% @tweets.each do |tweet| %>
+  <p>
+    <%= tweet.raw_data["user"]["name"] %>
+    :
+    <%= tweet.raw_data["full_text"] || tweet.raw_data["text"] %>
+  </p>
+<% end %>
+

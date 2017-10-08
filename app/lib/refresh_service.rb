@@ -17,13 +17,16 @@ class RefreshService
 
       puts "refreshing with (max_id #{max_id}, since_id #{since_id})"
 
-      tweets = @client.home_timeline(
-        count: TWEETS_PER_REQUEST,
-        max_id: Tweet.minimum(:twitter_id),
-        since_id: Tweet.maximum(:twitter_id)
-      )
+      options = { count: TWEETS_PER_REQUEST }
+
+      options.merge!({ max_id: max_id }) if max_id.present?
+      options.merge!({ since_id: since_id }) if max_id.present?
+
+      tweets = @client.home_timeline(options)
 
       puts "saving #{tweets.length} tweets"
+
+      break if tweets.length == 0
 
       tweets.each do |tweet|
         # Slow to do this check once per tweet, but fast enough for now

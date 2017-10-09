@@ -1,10 +1,18 @@
-<h1>Tweets</h1>
+<h1>Tweets from Yesterday</h1>
 
-<% @tweets.each do |tweet| %>
-  <p>
-    <%= tweet.raw_data["user"]["name"] %>
-    :
-    <%= tweet.raw_data["full_text"] || tweet.raw_data["text"] %>
-  </p>
-<% end %>
+<div id="tweets">
+  <% @tweets.each do |tweet| %>
+    <div class="tweet-container">
+      <div class="tweet" id="tweet-<%= tweet.twitter_id %>"></div>
+      <% if @metadata %>
+        <div class="tweet-metadata">
+          <u>Metadata</u><br />
+          <ul>
+            <li>Retweeter: <%= tweet.retweeter %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 

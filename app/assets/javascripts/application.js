@@ -12,4 +12,8 @@
 //
 //= require rails-ujs
 //= require turbolinks
+
+//= require twitter
+//= require load_tweets
+
 //= require_tree .

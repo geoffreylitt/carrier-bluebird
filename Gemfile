@@ -13,6 +13,8 @@ gem 'rails', '~> 5.1.4'
 
 gem "pg"
 
+gem "gon"
+
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets

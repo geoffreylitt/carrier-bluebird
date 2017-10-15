@@ -11,7 +11,7 @@ class TweetsController < ApplicationController
 
 
     @most_retweeted = tweets.order("(raw_data->>'retweet_count')::int desc").limit(20)
-    @most_favorited = tweets.order("(raw_data->>'retweet_count')::int desc").limit(20)
+    @most_favorited = tweets.where.not(twitter_id: @most_retweeted.map(&:twitter_id)).order("(raw_data->>'retweet_count')::int desc").limit(20)
     @normal_people = tweets.where("(raw_data->'user'->>'followers_count')::int < 1000").limit(20)
     @other_tweets = tweets.order(created_at: :desc).limit(50)
 

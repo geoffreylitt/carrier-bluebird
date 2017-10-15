@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: carrier_bluebird_developmennt
+  database: carrier_bluebird_development
 
 test:
   <<: *default

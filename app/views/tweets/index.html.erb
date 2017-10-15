@@ -1,7 +1,53 @@
 <h1>Tweets from Yesterday</h1>
 
 <div id="tweets">
-  <% @tweets.each do |tweet| %>
+  <h2>Most retweeted</h2>
+  <% @most_retweeted.each do |tweet| %>
+    <div class="tweet-container">
+      <div class="tweet" id="tweet-<%= tweet.twitter_id %>"></div>
+      <% if @metadata %>
+        <div class="tweet-metadata">
+          <u>Metadata</u><br />
+          <ul>
+            <li>Retweeter: <%= tweet.retweeter %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h2>Most favorited</h2>
+  <% @most_favorited.each do |tweet| %>
+    <div class="tweet-container">
+      <div class="tweet" id="tweet-<%= tweet.twitter_id %>"></div>
+      <% if @metadata %>
+        <div class="tweet-metadata">
+          <u>Metadata</u><br />
+          <ul>
+            <li>Retweeter: <%= tweet.retweeter %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h2>Normal people</h2>
+  <% @normal_people.each do |tweet| %>
+    <div class="tweet-container">
+      <div class="tweet" id="tweet-<%= tweet.twitter_id %>"></div>
+      <% if @metadata %>
+        <div class="tweet-metadata">
+          <u>Metadata</u><br />
+          <ul>
+            <li>Retweeter: <%= tweet.retweeter %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h2>Other tweets</h2>
+  <% @other_tweets.each do |tweet| %>
     <div class="tweet-container">
       <div class="tweet" id="tweet-<%= tweet.twitter_id %>"></div>
       <% if @metadata %>

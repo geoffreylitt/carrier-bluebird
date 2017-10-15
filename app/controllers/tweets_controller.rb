@@ -3,15 +3,21 @@ class TweetsController < ApplicationController
     if params[:live] == "true"
       tweets = Tweet.all
     else
-      tweets = Tweet.where(
-        # limit to only tweets from the previous day, in Eastern time
-        "created_at < ?",
-        DateTime.now.in_time_zone("US/Eastern").beginning_of_day
-      )
+      # limit to only tweets from the previous day, in Eastern time
+      beginning_of_day = DateTime.now.in_time_zone("US/Eastern").beginning_of_day
+      tweets = Tweet.where("created_at < ?", beginning_of_day).
+                     where("created_at > ?", beginning_of_day - 1.day)
     end
 
-    @tweets = tweets.order(created_at: :desc).limit(100)
-    gon.tweet_ids = @tweets.map(&:twitter_id).map(&:to_s)
+
+    @most_retweeted = tweets.order("(raw_data->>'retweet_count')::int desc").limit(20)
+    @most_favorited = tweets.order("(raw_data->>'retweet_count')::int desc").limit(20)
+    @normal_people = tweets.where("(raw_data->'user'->>'followers_count')::int < 1000").limit(20)
+    @other_tweets = tweets.order(created_at: :desc).limit(50)
+
+    all_tweets = @most_retweeted + @most_favorited + @normal_people + @other_tweets
+
+    gon.tweet_ids = all_tweets.uniq(&:twitter_id).map(&:twitter_id).map(&:to_s)
     @metadata = params[:metadata] == "true"
   end
 end

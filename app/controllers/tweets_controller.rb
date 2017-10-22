@@ -6,7 +6,12 @@ class TweetsController < ApplicationController
     #   * field
     #   * operator on that type of field (eg >, < for integers, but not strings)
     #   * value on the other end
-    tweets = Tweet.where(synced_user_id: current_user.id)
+
+    if current_user.present?
+      tweets = Tweet.where(synced_user_id: current_user.id)
+    else
+      tweets = Tweet.none
+    end
 
     unless params[:live] == "true"
       # limit to only tweets from the previous day, in Eastern time

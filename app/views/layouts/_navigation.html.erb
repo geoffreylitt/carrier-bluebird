@@ -14,7 +14,7 @@
         <ul class="nav navbar-nav navbar-right">
         <li><%= link_to 'Home', root_path %></li>
         <% if current_user %>
-          <li>Signed in as <%= current_user.name %></li>
+          <li>Signed in as <%= image_tag current_user.profile_image %> <%= current_user.username %></li>
           <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
         <% else %>
           <li><%= link_to "Sign in with Twitter", "/auth/twitter" %></li>

@@ -39,7 +39,8 @@ class RefreshService
             twitter_id: tweet.id,
             created_at: tweet.created_at,
             synced_at: Time.now,
-            sync_id: sync_id
+            sync_id: sync_id,
+            synced_user_id: 1
           )
         end
       end
